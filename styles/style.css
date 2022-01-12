@@ -68,3 +68,9 @@ h3{
 .drag-area.active {
     border: 2px solid cornflowerblue;
 }
+
+.drag-area img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
