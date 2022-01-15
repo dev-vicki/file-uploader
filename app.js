@@ -1,6 +1,19 @@
 const dragArea = document.querySelector(".drag-area");
 const dragText = document.querySelector(".header");
+let button =  document.querySelector(".button");
+let input = document.querySelector("input");
+
 let file;
+
+button.onclick = () => {
+    input.click();
+}
+
+input.addEventListener("change", function(){
+    file = this.files[0];
+    dragArea.classList.add("active");
+    displayFile();
+})
 
 // inside drag area
 dragArea.addEventListener("dragover", (event) => {
@@ -25,27 +38,45 @@ dragArea.addEventListener("drop", (event) =>{
   // only single file is accepted at a time
   file = event.dataTransfer.files[0];
   // console.log(file)
+  displayFile();
 
-  let fileType = file.type;
-  // console.log(fileType)
+});
 
-  let validExtensions = ["image/jpeg", "image/jpg", "image/png", "text/html","text/css", "text/plain", "application/pdf"];
+function displayFile(){
+      let fileType = file.type;
+       console.log(fileType)
 
-  if(validExtensions.includes(fileType)) {
-      let fileReader = new FileReader();
+      let validExtensions = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "text/plain"
+      ];
 
-      fileReader.onload = () =>{
+      if (validExtensions.includes("text/plain")) {
+        let fileReader = new FileReader();
+        fileReader.onload = () => {
           let fileURL = fileReader.result;
-          //console.log(fileURL);
+          let format = `<p>"${fileURL}"</p>`;
+          dragArea.innerHTML = format;
+        };
+        fileReader.readAsText(file);
+      }
+
+      else if (validExtensions.includes(fileType)) {
+        let fileReader = new FileReader();
+
+        fileReader.onload = () => {
+          let fileURL = fileReader.result;
+        //   console.log(fileURL);
 
           let imgTag = `<img src="${fileURL}" alt="">`;
+
           dragArea.innerHTML = imgTag;
-      };
-      fileReader.readAsDataURL(file)
-  } else {
-      alert('Entered file format not supported!');
-      dragArea.classList.remove('active');
-  }
-
-})
-
+        };
+        fileReader.readAsDataURL(file);
+      } else  {
+        alert("Entered file format not supported!");
+        dragArea.classList.remove("active");
+      }
+}
