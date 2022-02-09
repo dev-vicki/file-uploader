@@ -37,46 +37,49 @@ dragArea.addEventListener("drop", (event) =>{
 
   // only single file is accepted at a time
   file = event.dataTransfer.files[0];
-  // console.log(file)
+   //console.log(file)
   displayFile();
 
 });
 
 function displayFile(){
       let fileType = file.type;
-       console.log(fileType)
+       //console.log(fileType)
 
       let validExtensions = [
         "image/jpeg",
         "image/jpg",
         "image/png",
-        "text/plain"
       ];
 
-      if (validExtensions.includes("text/plain")) {
-        let fileReader = new FileReader();
-        fileReader.onload = () => {
-          let fileURL = fileReader.result;
-          let format = `<p>"${fileURL}"</p>`;
-          dragArea.innerHTML = format;
-        };
-        fileReader.readAsText(file);
-      }
+      let validFileExtensions = ["text/plain"];
 
-      else if (validExtensions.includes(fileType)) {
+      if (validExtensions.includes(fileType)) {
         let fileReader = new FileReader();
 
         fileReader.onload = () => {
           let fileURL = fileReader.result;
-        //   console.log(fileURL);
+          // console.log(fileURL);
 
           let imgTag = `<img src="${fileURL}" alt="">`;
 
           dragArea.innerHTML = imgTag;
         };
         fileReader.readAsDataURL(file);
-      } else  {
-        alert("Entered file format not supported!");
-        dragArea.classList.remove("active");
       }
+
+     else if  (validFileExtensions.includes("text/plain")) {
+       let fileReader = new FileReader();
+       fileReader.onload = () => {
+         let fileURL = fileReader.result;
+         let format = `<p>"${fileURL}"</p>`;
+         dragArea.innerHTML = format;
+       };
+       fileReader.readAsText(file);
+     }
+     else  {
+       alert("Entered file format not supported!");
+       dragArea.classList.remove("active");
+     }
 }
+
